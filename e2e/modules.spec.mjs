@@ -114,7 +114,7 @@ test('a delete elsewhere keeps a draft in the edit sheet; saving it adds it back
 
 test('check for updates: a new version takes over at once', async ({ phone }) => {
   const page = await phone();
-  await page.goto(APP + '&sw', { waitUntil: 'domcontentloaded' });
+  await signIn(page, 'member', { path: APP + '&sw' });
   await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller), { timeout: 30_000 }).toBe(true);
   await page.evaluate(() => { window.__same = true; });
   await page.request.get('/__test/bump');

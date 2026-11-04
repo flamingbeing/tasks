@@ -1,11 +1,11 @@
 // @core/theme: the switch sets this device's theme and density, and the choice survives a reload.
 import AxeBuilder from './axe.mjs';
-import { test, expect, APP, openSettings } from './fixtures.mjs';
+import { test, expect, APP, openSettings, signIn } from './fixtures.mjs';
 import { APP as CONFIG } from '../app/src/config.js';
 
 test('theme and density switch: kept on this device, accessible in dark', async ({ phone }) => {
   const page = await phone();
-  await page.goto(APP, { waitUntil: 'domcontentloaded' });
+  await signIn(page);
   await openSettings(page, 'This device');
   const root = page.locator('html');
   await expect(root).not.toHaveAttribute('data-theme');
@@ -30,7 +30,7 @@ const cssVar = (page, name) => page.evaluate(n => getComputedStyle(document.docu
 
 test('look and dark style: applied before the page is ready, kept on reload, OLED is black', async ({ phone }) => {
   const page = await phone();
-  await page.goto(APP, { waitUntil: 'domcontentloaded' });
+  await signIn(page);
   await openSettings(page, 'This device');
   const root = page.locator('html');
   const lightBg = await cssVar(page, '--bg');
@@ -68,7 +68,7 @@ test('look and dark style: applied before the page is ready, kept on reload, OLE
 
 test('accent: a picked colour is kept on this device, Reset goes back to the look\'s', async ({ phone }) => {
   const page = await phone();
-  await page.goto(APP, { waitUntil: 'domcontentloaded' });
+  await signIn(page);
   await openSettings(page, 'This device');
   const reset = page.getByRole('button', { name: 'Reset colour' });
   await expect(reset).toBeHidden();
