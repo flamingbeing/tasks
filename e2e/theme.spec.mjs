@@ -90,7 +90,7 @@ const LOOKS = ['default', 'flat', 'soft', 'paper', 'navy', 'black', 'contrast', 
 
 test('the look picker offers every look', async ({ phone }) => {
   const page = await phone();
-  await page.goto(APP, { waitUntil: 'domcontentloaded' });
+  await signIn(page);
   await openSettings(page, 'This device');
   const looks = await page.locator('#preset-pick').locator('option').evaluateAll(os => os.map(o => /** @type {HTMLOptionElement} */ (o).value));
   expect(looks).toEqual(LOOKS);
@@ -99,7 +99,7 @@ test('the look picker offers every look', async ({ phone }) => {
 for (const look of LOOKS) {
   test(`look ${look} passes axe in light, dark and OLED`, async ({ phone }) => {
     const page = await phone();
-    await page.goto(APP, { waitUntil: 'domcontentloaded' });
+    await signIn(page);
     await openSettings(page, 'This device');
     await page.locator('#preset-pick').selectOption(look);
     for (const [theme, dark] of [['light', 'dark'], ['dark', 'dark'], ['dark', 'oled']]) {
