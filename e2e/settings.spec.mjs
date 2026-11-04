@@ -42,9 +42,9 @@ test('the device value survives sign-out and a reload', async ({ phone }) => {
   await openSettings(a, 'Account');
   await a.click('#sign-out');
   await openToday(a);
-  await expect(a.locator('#signed-out')).toBeVisible();
+  await expect(a.locator('#signed-out .ui-signin')).toBeVisible();
   await a.reload({ waitUntil: 'domcontentloaded' });
-  await expect(a.locator('#signed-out')).toBeVisible();
+  await expect(a.locator('#signed-out .ui-signin')).toBeVisible();
   await a.evaluate(e => window.starter.signInAs(e), email);
   await expect(a.locator('#list-view')).toBeVisible();
   await open(a);

@@ -58,10 +58,9 @@ body { margin: 0; }
 @media (min-width: 600px) { .toasts { bottom: var(--pad); } }
 
 
-/* the app's icon beside its name in the side bar, and large on the signed-out screen */
+/* the app's icon beside its name in the side bar */
 .ui-sidebar-name { display: flex; align-items: center; gap: .5rem; }
 .app-mark { flex: none; border-radius: 22%; }
-.app-mark-big { display: block; margin: var(--pad) 0 var(--gap); }
 
 /* search, opened from the bar's icon (list-search.js): the box takes the whole bar, Cancel at its end; its note under it */
 .bar-icon { min-width: var(--tap); display: inline-flex; align-items: center; justify-content: center; }
