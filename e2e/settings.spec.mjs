@@ -41,11 +41,11 @@ test('the device value survives sign-out and a reload', async ({ phone }) => {
   await order(a).selectOption({ label: 'By text' });
   await openSettings(a, 'Account');
   await a.click('#sign-out');
-  await openToday(a);
   await expect(a.locator('#signed-out .ui-signin')).toBeVisible();
   await a.reload({ waitUntil: 'domcontentloaded' });
   await expect(a.locator('#signed-out .ui-signin')).toBeVisible();
   await a.evaluate(e => window.starter.signInAs(e), email);
+  await openToday(a);   // (signed back in on the tab left open: Settings)
   await expect(a.locator('#list-view')).toBeVisible();
   await open(a);
   await expect(order(a)).toHaveValue('1');
