@@ -95,12 +95,12 @@ test('a file that is not a picture is kept as it is; sign-out keeps an unsent up
   await openSettings(page, 'Account');
   await page.click('#sign-out');
   await expect(page.locator('#sign-out-msg')).toContainText('unsent');
-  await openToday(page);
   const [job] = await page.evaluate(() => window.starter.files().jobs());
   expect(job).toMatchObject({ op: 'put', rec: { name: `${t}.txt` } });
   expect(await cached(page)).toContain(`${job.scope}/${job.id}`);
   await setOffline(page.context(), false);
   await page.evaluate(e => window.starter.signInAs(e), email);
+  await openToday(page);   // (signed back in on the tab left open: Settings)
   await expect(page.locator('#list-view')).toBeVisible();
   await expect.poll(async () => (await records(`${t}.txt`))[0]?.state, { timeout: 15_000 }).toBe('stored');
   expect(await records(`${t}.txt`)).toEqual([expect.objectContaining({ type: 'text/plain', size: 13 })]);
@@ -108,10 +108,10 @@ test('a file that is not a picture is kept as it is; sign-out keeps an unsent up
 
   await openSettings(page, 'Account');
   await page.click('#sign-out');
-  await openToday(page);
-  await expect(page.locator('#signed-out')).toBeVisible();
+  await expect(page.locator('#signed-out .ui-signin')).toBeVisible();
   const other = `${uniq('u')}@example.com`;
   await page.evaluate(e => window.starter.signInAs(e), other);
+  await openToday(page);   // (signed in on the tab left open: Settings)
   await expect(page.locator('#no-access')).toBeVisible();
   await expect.poll(() => cached(page)).toEqual([]);
 });

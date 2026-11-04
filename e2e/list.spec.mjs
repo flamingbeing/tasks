@@ -5,7 +5,7 @@ import { test, expect, clickOpens, signIn, add, synced, serverHas, db, uniq, tod
 test('signed out: the sign-in screen, accessible', { tag: '@smoke' }, async ({ phone }) => {
   const page = await phone();
   await page.goto(APP, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#signed-out')).toBeVisible();
+  await expect(page.locator('#signed-out .ui-signin')).toBeVisible();
   expect(await AxeBuilder(page)).toEqual([]);
 });
 
