@@ -1,7 +1,4 @@
-// Pictures, before they are stored: upright (the camera's orientation applied), at most maxDim on the long side, plus a
-// thumbnail at most thumbDim, re-encoded as webp (jpeg where the browser can't write webp). Re-encoding drops the
-// photo's EXIF, GPS included, so no place leaves the device by accident (exif.js reads what the app asked for first).
-// Anything that is not a picture the browser can draw comes back null and is stored as it is.
+// image.js: what it does is at the top of types.d.ts (kept out of the startup files).
 
 /** @typedef {import('./types').ImageOptions} ImageOptions */
 

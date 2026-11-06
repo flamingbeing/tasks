@@ -1,30 +1,4 @@
-// @core/files: files(options) -> a module for createApp({ config, modules }) (app-sync's runner), needs auth and sync
-// (app-sync SHAPES.md row 6). A file's metadata is a sync record in a collection the app names (so it syncs, conflicts
-// and counts like any save); its bytes go to the app's own Worker (/api/files/, worker/files.js, an R2 bucket) through
-// an upload queue of this module's own.
-//
-// files({ collection, scope, maxBytes, image, exif, url, fetch, cache, token, now, win })
-//   collection  the sync collection of the metadata records (the app lists it in sync's colls and its rules)
-//   scope(user) the scope a file goes to when add() names none (default: the account's own uid, a personal file)
-//   maxBytes    per-file cap (default 100 MB, the Worker's request limit); bigger files are refused at add()
-//   image       { maxDim (2048), thumbDim (320), type ('image/webp'), quality (0.85) }: pictures are stored upright,
-//               resized and re-encoded (EXIF and GPS dropped), with a thumbnail (image.js); other files as they are
-//   exif        false (default) | true: read the date taken before the re-encode | { place: true }: and the GPS place
-//   url         the Worker route (default '/api/files'); fetch, cache, token, now, win: stand-ins for tests
-//
-// -> api
-//   add(file, { scope, extra }) -> { id, record }: at once, offline too. The record { id, name, type, size, w?, h?,
-//     thumb?, taken?, place?, state: 'local', ...extra } is saved through sync.save; the bytes (and thumbnail) wait in
-//     the device cache (IndexedDB `<name>-files`) and an upload job (ctx.storage: `<name>:files/queue`). Uploads run
-//     when online and signed in, retry with back-off, and count as unsent in ctx.status (so sign-out says so, a switch
-//     to another account waits, and the update's reload waits). Once sent, the record's state becomes 'stored'.
-//   url(id, { scope, thumb }) -> an object URL: from the device cache, else fetched from the Worker and kept.
-//     blob(id, { scope, thumb }) -> the Blob. A file not uploaded yet from another device: an error with status 404.
-//   remove(idOrRecord, { scope }) -> the record's delete through sync (a tombstone), and the Worker delete queued.
-//   jobs() -> the waiting jobs (stuck: refused, with why); retry(id?) tries stuck ones again; discard(id) drops one.
-//   kick() -> sends what is due now (the module does this itself on sign-in, coming online and after add).
-// Sign-out keeps the cache and the queue (they send at the same account's next sign-in); a switch to another account
-// or forget() wipes both, like sync's device copy.
+// @core/files: what it does and how to call it are at the top of types.d.ts (kept out of the startup files).
 import { createQueue } from './queue.js';
 import { deviceCache } from './cache.js';
 import { prepareImage } from './image.js';

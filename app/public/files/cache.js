@@ -1,7 +1,4 @@
-// The device copy of the files' bytes: IndexedDB database `<name>-files`, store `blobs`, one Blob per key
-// `<scope>/<id>` and `<scope>/<id>.thumb` (NOTES "Files formats"), through vendored idb-keyval. Files added here wait
-// in it for their upload; files fetched from the Worker are kept for next time. A switch to another account wipes it.
-// Without IndexedDB (some private windows) it keeps them in memory for the page.
+// cache.js: what it does is at the top of types.d.ts (kept out of the startup files).
 import { createStore, get, set, del, clear } from '../vendor/idb-keyval/6.3.0/index.js';
 
 /** @typedef {import('./types').BlobCache} BlobCache */

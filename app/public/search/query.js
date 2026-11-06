@@ -1,8 +1,4 @@
-// The search box's text -> terms (pure, no dependencies). Ported from a working logbook parser.
-//   field:value   one field, or an app-defined filter (is:, has:, after:); the app names them
-//   "a phrase"    an exact phrase       -word / -field:value   leave out
-//   a OR b, a | b either (a group); a space or AND means both
-// A near miss of a field name ("tga:16") is searched as plain text and reported, so the box can say "did you mean tag:?".
+// parseQuery (the search box's text -> terms): its grammar is at the top of types.d.ts (kept out of the startup files).
 
 /** @typedef {{ field: string | null, text: string, phrase: boolean, neg: boolean }} Term */
 /** @typedef {{ groups: Term[][], unknown: { op: string, suggest: string }[] }} Parsed */

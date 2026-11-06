@@ -7,6 +7,17 @@
   <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
   <meta name="robots" content="noindex, nofollow">
   <title>Tasks</title>
+  <meta name="description" content="Tasks: works offline, installs like an app and syncs between your devices.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tasks">
+  <meta property="og:title" content="Tasks">
+  <meta property="og:description" content="Tasks: works offline, installs like an app and syncs between your devices.">
+  <meta property="og:url" content="https://tasks.flamingbeing.com/">
+  <meta property="og:image" content="https://tasks.flamingbeing.com/icons/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Tasks">
+  <meta name="twitter:card" content="summary_large_image">
   <script type="importmap">
 {
   "imports": {
@@ -17,7 +28,7 @@
     "@core/ui": "https://core.anawj.com/ui/1.0.0-rc.110/ui/index.js",
     "@core/theme": "https://core.anawj.com/ui/1.0.0-rc.110/theme/index.js",
     "@core/settings": "https://core.anawj.com/ui/1.0.0-rc.110/settings/index.js",
-    "app-update/register.js": "https://core.anawj.com/ui/1.0.0-rc.108/update/register.js",
+    "app-update/register.js": "https://core.anawj.com/ui/1.0.0-rc.110/update/register.js",
     "firebase/app": "./vendor/firebase/12.19.0/firebase-app.js",
     "firebase/auth": "./vendor/firebase/12.19.0/firebase-auth.js",
     "firebase/firestore": "./vendor/firebase/12.19.0/firebase-firestore.js",
@@ -34,7 +45,7 @@
   <link rel="modulepreload" href="https://core.anawj.com/ui/1.0.0-rc.110/ui/index.js" data-module>
   <link rel="modulepreload" href="https://core.anawj.com/ui/1.0.0-rc.110/theme/index.js" data-module>
   <link rel="modulepreload" href="https://core.anawj.com/ui/1.0.0-rc.110/settings/index.js" data-module>
-  <link rel="modulepreload" href="https://core.anawj.com/ui/1.0.0-rc.108/update/register.js" data-module>
+  <link rel="modulepreload" href="https://core.anawj.com/ui/1.0.0-rc.110/update/register.js" data-module>
   <link rel="modulepreload" href="./vendor/firebase/12.19.0/firebase-app.js" data-module>
   <link rel="modulepreload" href="./vendor/firebase/12.19.0/firebase-auth.js" data-module>
   <link rel="modulepreload" href="./vendor/firebase/12.19.0/firebase-firestore.js" data-module>
@@ -63,9 +74,9 @@
       <span class="ui-bar-side ui-bar-end">
         <!-- search (the search recipe, list-search.js, shows it): opens the box over the bar; it narrows every tab -->
         <button type="button" id="search-open" class="bar-icon" aria-label="Search" title="Search" hidden></button>
-        <!-- cloud{ the sync button (app-ui's syncButton): the state as a cloud icon, a tap syncs now; last, top right -->
+        <!-- sync{ the sync button (app-ui's syncButton): the state as a cloud icon, a tap syncs now; last, top right -->
         <button type="button" id="sync-btn" aria-label="Connecting…" title="Connecting…"></button>
-        <!-- }cloud -->
+        <!-- }sync -->
       </span>
       <div id="list-tools" class="bar-search"></div>
     </header>
@@ -81,7 +92,7 @@
     <main class="ui-screens">
       <section class="ui-screen" id="today-page" aria-labelledby="today-title">
         <h1 class="ui-large-title" id="today-title">Today</h1>
-        <!-- cloud{ sign-in, access and set-up: a static app has none (tools/flavour.mjs) -->
+        <!-- sync{ sign-in, access and set-up: a local-only app has none (tools/flavour.mjs) -->
         <div id="no-access" hidden>
           <p>This account has no access yet. Ask an admin to add it.</p>
           <p class="small">Account id: <code id="uid"></code></p>
@@ -89,7 +100,7 @@
         <div id="not-set-up" hidden>
           <p>This app isn't connected to its Firebase project yet (see README, "Fill").</p>
         </div>
-        <!-- }cloud -->
+        <!-- }sync -->
         <div id="list-view" hidden>
           <div id="conflict-sheet"></div>
           <div id="refused-list"></div>
@@ -126,20 +137,20 @@
 
       <section class="ui-screen ui-tab-page" id="settings-page" aria-labelledby="settings-title" hidden>
         <h1 class="ui-large-title" id="settings-title">Settings</h1>
-        <!-- cloud{ -->
+        <!-- sync{ -->
         <div id="account" class="status-line">
           <span id="who"></span>
           <button id="sign-out" type="button" hidden>Sign out</button>
           <p id="sign-out-msg" class="error" role="alert"></p>
         </div>
-        <!-- }cloud -->
+        <!-- }sync -->
         <div id="settings-host"></div>
       </section>
     </main>
-    <!-- cloud{ the signed-out page (app-ui signInScreen) covers the whole page, so it sits outside the tab pages:
+    <!-- sync{ the signed-out page (app-ui signInScreen) covers the whole page, so it sits outside the tab pages:
          signing out from any tab, Settings too, shows it at once -->
     <div id="signed-out" hidden></div>
-    <!-- }cloud -->
+    <!-- }sync -->
 
     <!-- bulk edit (src/screens/bulk.js): a held task's menu (a mouse's right-click), the bar's menus, and each tab's bar -->
     <template id="task-menu">

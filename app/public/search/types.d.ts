@@ -1,3 +1,23 @@
+// createSearch: an in-memory index over MiniSearch (vendored) for the records an app already holds. Nothing runs on
+// import; the index lives only as long as the object, so build it at start and keep it current from sync's watch.
+// MiniSearch (~78 KB) loads on first need, not with the page: prepare() (call it when the search box gets focus) or
+// the first search. Until it is in, words match as plain text (no ranking, no typo tolerance) and onReady runs once it
+// is, so the page can search again. loadSearch() loads it ahead (tests, or an app that searches at start).
+//
+// The search box's text -> terms (pure, no dependencies). Ported from a working logbook parser.
+//   field:value   one field, or an app-defined filter (is:, has:, after:); the app names them
+//   "a phrase"    an exact phrase       -word / -field:value   leave out
+//   a OR b, a | b either (a group); a space or AND means both
+// A near miss of a field name ("tga:16") is searched as plain text and reported, so the box can say "did you mean tag:?".
+//
+// index.js:
+// @core/search (incubating here; it moves into app-sync once a second kind of app uses it): full-text search over the
+// records an app holds, with operators. Named exports only and nothing runs on import, so a build keeps only what a
+// page uses.
+//   createSearch(options)  the index: feed, update, remove, search, prepare (search.js)
+//   loadSearch()           loads MiniSearch ahead (it otherwise loads on first need)
+//   parseQuery             the box's text -> terms, on its own (query.js, pure)
+//   insertOperator, usesOperators   for a "?" operator list: add one at the cursor; whether a query uses any
 /** a record to index: it needs a string `id`; the rest is the app's */
 export type Record_ = Record<string, unknown>;
 
