@@ -65,7 +65,7 @@ const SHELL = [
   'vendor/minisearch/7.2.0/LICENSE',
   'vendor/minisearch/7.2.0/index.js',
   'vendor/minisearch/7.2.0/package.json',
-  'https://core.anawj.com/update/0.2.0/register.js',
+  'https://core.anawj.com/ui/1.0.0-rc.108/update/register.js',
   'https://core.anawj.com/sync/1.5.5/app.js',
   'https://core.anawj.com/sync/1.5.5/src/runner.js',
   'https://core.anawj.com/sync/1.5.5/auth.js',
@@ -181,12 +181,12 @@ const MANIFEST = {};
 
 // add: service worker handlers
 
-importScripts('https://core.anawj.com/update/0.2.0/sw-core.js');
+importScripts('https://core.anawj.com/ui/1.0.0-rc.108/update/sw-core.js');
 AppUpdate.init({
   app: 'app', version: VERSION, shell: SHELL, manifest: MANIFEST,
   never: ['/api/', /\/sw\.js$/],
   runtime: [
     { name: 'kit', match: 'https://design.flamingbeing.com/v1/', strategy: 'stale-while-revalidate', max: 40 },
-    { name: 'pinned', match: /^https:\/\/core\.anawj\.com\/(sync|update|ui)\/\d+\.\d+\.\d+\//, strategy: 'cache-first', max: 40 },
+    { name: 'pinned', match: /^https:\/\/core\.anawj\.com\/(sync|update|ui)\/\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?\//, strategy: 'cache-first', max: 40 },
   ],
 });
