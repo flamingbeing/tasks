@@ -11,7 +11,7 @@ export const CSP_ENFORCE = false;
 
 // The page's import map (app/index.html), the one inline script, allowed by its hash (worker/test/headers.test.mjs
 // says the new one when the map changes).
-export const IMPORT_MAP = "'sha256-IDr6R/nxWEqHfN8p03kEQo9hz3s+YhmI3CImcQybqOI='";
+export const IMPORT_MAP = "'sha256-/QFAe6ZBvNiBblcXLHVXOQwdZQTu3kIr+U0TBpDBgzA='";
 // Shared modules (app-sync, app-update, app-ui: its scripts and style sheets) are served at exact versions from here.
 const CORE = 'https://core.anawj.com';
 // Firebase: the SDK is vendored (app/public/vendor/firebase/<ver>/, served as 'self'); Google sign-in, Firestore and
