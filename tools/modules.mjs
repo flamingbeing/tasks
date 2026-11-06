@@ -140,7 +140,7 @@ export function generate(manifest, pkgText, { html, tsconfig, vite }) {
   let page = html.replace(MAP_RE, (_, a, __, c) => a + JSON.stringify({ imports }, null, 2) + c);
   // the core addresses outside the map (app-ui's style sheets and early script) at the pinned version too
   for (const [pkg, base] of Object.entries(manifest.core ?? {}))
-    if (versions[pkg]) page = page.replace(new RegExp(`(${esc(base)})\\d+\\.\\d+\\.\\d+[^/"]*/`, 'g'), `$1${versions[pkg]}/`);
+    if (versions[pkg]) page = page.replace(new RegExp(`(${esc(base)})\\d+\\.\\d+\\.\\d+[^/"]*/(?!update/)`, 'g'), `$1${versions[pkg]}/`);   // an explicit /update/ address (app-update from app-ui rc.108) keeps its own version
   // the modules' style sheets: right after app.css's link, marked data-module
   page = page.replace(STYLE_LINE, '');
   const styles = manifest.styles ?? [];
