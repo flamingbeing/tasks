@@ -1,9 +1,4 @@
-// The upload queue: the uploads and deletes this device still owes the Worker, one account's at a time, kept as JSON
-// in the module's storage (ctx.storage(): `<name>:files/queue`, NOTES "Files formats"):
-//   { v: 1, uid, jobs: Job[] }
-//   Job { id, scope, op: 'put' | 'delete', parts: ['file', 'thumb'?] (put: the parts still to send), tries,
-//         at (ms: not before), stuck?: why (refused: waits for retry or discard), rec? (put: the metadata record) }
-// Pure: no network or timers here (module.js runs it), so the unit tests drive it with their own store and clock.
+// queue.js: what it does is at the top of types.d.ts (kept out of the startup files).
 
 /** @typedef {import('./types').FileRecord} FileRecord */
 /** @typedef {import('./types').Job} Job */

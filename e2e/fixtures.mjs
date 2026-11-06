@@ -5,16 +5,21 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-// cloud{ the emulators (a static app has none: tools/flavour.mjs)
+// sync{ the emulators (a local-only app has none: tools/flavour.mjs)
 import { fsAdmin } from '../.devkit/playwright/helpers.mjs';
 
 export const db = fsAdmin('demo-sandbox-app');
-export const APP = '/app/?emulator';
-// }cloud
-/* static{
+// The emulators' ports when not the usual 8080/9099 (a machine where 8080 is taken): E2E_EMULATOR="<firestore>:<auth>",
+// else the ports in FIRESTORE_EMULATOR_HOST / FIREBASE_AUTH_EMULATOR_HOST; app-sync's ?emulator=<fs>:<auth> reads them
+const port = host => host?.match(/:(\d+)$/)?.[1];
+const ports = process.env.E2E_EMULATOR || (port(process.env.FIRESTORE_EMULATOR_HOST) || port(process.env.FIREBASE_AUTH_EMULATOR_HOST)
+  ? `${port(process.env.FIRESTORE_EMULATOR_HOST) || 8080}:${port(process.env.FIREBASE_AUTH_EMULATOR_HOST) || 9099}` : '');
+export const APP = ports ? `/app/?emulator=${ports}` : '/app/?emulator';
+// }sync
+/* local-only{
 // ?test: no service worker unless ?sw is given too (app.js)
 export const APP = '/app/?test';
-}static */
+}local-only */
 /** today as the browser sees it: YYYY-MM-DD, local time (the tests' browser has this machine's time zone) */
 export const today = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 export const uniq = (p = 't') => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
@@ -60,7 +65,7 @@ async function routeUiRetry(context) {
   });
 }
 
-// Hermetic for the rest: the pages load the sync and update modules from core.anawj.com, a stylesheet from
+// Hermetic for the rest: the pages load the sync module from core.anawj.com, a stylesheet from
 // design.flamingbeing.com and (Firebase Auth's SDK) Google's gapi scripts. A stalled fetch to any of them made tests swing
 // with the internet, so those core files come from e2e/fixtures/core/ (a copy of the pinned versions: refresh with
 // tools/refresh-core-fixtures.sh after changing a version), the stylesheet is empty and the Google hosts are refused. A
@@ -175,7 +180,7 @@ async function check(made) {
   }
 }
 
-// cloud{ sign-in and the server's copy
+// sync{ sign-in and the server's copy
 // Sign in as a new made-up Google account; with a role, an admin "adds" it (the role doc) and the page picks the
 // new claims up by itself. -> { uid, email }
 export async function signIn(page, role = 'member', { path = APP } = {}) {
@@ -203,16 +208,16 @@ export async function signInAgain(page, email) {
   await expect.poll(() => page.evaluate(() => window.starter.ready)).toBe(true);
 }
 
-// }cloud
-/* static{
-// A static app has no sign-in: the step a cloud app's tests sign in with only opens the list. -> {}
+// }sync
+/* local-only{
+// A local-only app has no sign-in: the step an offline-first app's tests sign in with only opens the list. -> {}
 export async function signIn(page, role = 'member', { path = APP } = {}) {
   await page.goto(path, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#list-view')).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.starter.ready)).toBe(true);
   return {};
 }
-}static */
+}local-only */
 
 export async function add(page, text) {
   await page.fill('#new-text', text);
@@ -241,7 +246,7 @@ export const openToday = async page => { await toTop(page); await page.locator(t
 export const openTab = async (page, name) => { await toTop(page); await page.locator(tabLink(`${name}-page`)).first().click(); await expect(page.locator(`#${name}-page`)).toBeVisible(); };
 export const clickOpens = async (button, dialog) => { await button.dispatchEvent('click'); await expect(dialog).toBeVisible(); };
 export const synced = page => expect.poll(() => page.evaluate(() => window.starter.status), { timeout: 15_000 }).toBe('synced');
-// cloud{
+// sync{
 export const serverHas = text => expect.poll(async () => (await db.list('spaces/_/tasks')).some(d => d.text === text), { timeout: 15_000 }).toBe(true);
 // The id of the shared item with this text (db.list leaves document ids out).
 export async function itemIdOf(text) {
@@ -255,4 +260,4 @@ export async function itemIdOf(text) {
     if (!(token = j.nextPageToken || '')) return undefined;
   }
 }
-// }cloud
+// }sync

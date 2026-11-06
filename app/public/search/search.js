@@ -1,8 +1,4 @@
-// createSearch: an in-memory index over MiniSearch (vendored) for the records an app already holds. Nothing runs on
-// import; the index lives only as long as the object, so build it at start and keep it current from sync's watch.
-// MiniSearch (~78 KB) loads on first need, not with the page: prepare() (call it when the search box gets focus) or
-// the first search. Until it is in, words match as plain text (no ranking, no typo tolerance) and onReady runs once it
-// is, so the page can search again. loadSearch() loads it ahead (tests, or an app that searches at start).
+// createSearch: what it does and how to call it are at the top of types.d.ts (kept out of the startup files).
 import { parseQuery } from './query.js';
 
 /** @type {any} */

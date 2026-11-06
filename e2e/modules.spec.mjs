@@ -47,6 +47,7 @@ test('forget this device: refused while unsent, then wipes the phone', async ({ 
   await add(page, uniq('unsent'));
   await openSettings(page, 'Account');
   await page.click('#sign-out');
+  await expect(page.locator('#signed-out .ui-signin')).toBeVisible();   // (at once, on Settings too)
   await page.click('#forget');
   await expect(page.locator('#forget-msg')).toContainText('not sent yet');
   await expect(page.locator('#forget-force')).toBeVisible();
