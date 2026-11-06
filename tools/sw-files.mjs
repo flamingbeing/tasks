@@ -16,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SYNC = /^https:\/\/core\.anawj\.com\/sync\/(\d+\.\d+\.\d+[^/]*)\/(.+)$/;
-const UI = /^https:\/\/core\.anawj\.com\/ui\/(\d+\.\d+\.\d+[^/]*)\/(.+)$/;
+// an explicit /update/ address (app-update, from app-ui rc.108) is its own pinned file, not part of the kit pinned here
+const UI = /^https:\/\/core\.anawj\.com\/ui\/(\d+\.\d+\.\d+[^/]*)\/(?!update\/)(.+)$/;
 // files in the app folder that are never served to the page (the Worker's .assetsignore leaves them out too)
 const SKIP = [/(^|\/)\./, /^test\//, /\.rules$/, /^firebase\.json$/, /\.d\.ts$/, /(^|\/)sw\.js$/, /\.(map|log)$/];
 
